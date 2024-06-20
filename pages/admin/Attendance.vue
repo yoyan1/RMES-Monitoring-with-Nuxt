@@ -1,20 +1,4 @@
 <script setup lang="ts">
-const columns = [{
-  key: 'name',
-  label: 'Name'
-}, {
-  key: 'title',
-  label: 'Title'
-}, {
-  key: 'email',
-  label: 'Email'
-}, {
-  key: 'role',
-  label: 'Role'
-}, {
-  key: 'actions'
-}]
-
 const people = [{
   id: 1,
   name: 'Lindsay Walton',
@@ -51,44 +35,72 @@ const people = [{
   title: 'Principal Designer',
   email: 'floyd.miles@example.com',
   role: 'Member'
+}, {
+  id: 7,
+  name: 'Emily Selman',
+  title: 'VP, User Experience',
+  email: '',
+  role: 'Admin'
+}, {
+  id: 8,
+  name: 'Kristin Watson',
+  title: 'VP, Human Resources',
+  email: '',
+  role: 'Member'
+}, {
+  id: 9,
+  name: 'Emma Watson',
+  title: 'Front-end Developer',
+  email: '',
+  role: 'Member'
+}, {
+  id: 10,
+  name: 'John Doe',
+  title: 'Designer',
+  email: '',
+  role: 'Admin'
+}, {
+  id: 11,
+  name: 'Jane Doe',
+  title: 'Director of Product',
+  email: '',
+  role: 'Member'
+}, {
+  id: 12,
+  name: 'John Smith',
+  title: 'Copywriter',
+  email: '',
+  role: 'Admin'
+}, {
+  id: 13,
+  name: 'Jane Smith',
+  title: 'Senior Designer',
+  email: '',
+  role: 'Owner'
 }]
 
-const items = (row) => [
-  [{
-    label: 'Edit',
-    icon: 'i-heroicons-pencil-square-20-solid',
-    click: () => console.log('Edit', row.id)
-  }, {
-    label: 'Duplicate',
-    icon: 'i-heroicons-document-duplicate-20-solid'
-  }], [{
-    label: 'Archive',
-    icon: 'i-heroicons-archive-box-20-solid'
-  }, {
-    label: 'Move',
-    icon: 'i-heroicons-arrow-right-circle-20-solid'
-  }], [{
-    label: 'Delete',
-    icon: 'i-heroicons-trash-20-solid'
-  }]
-]
+const page = ref(1)
+const pageCount = 5
 
-const selected = ref([people[1]])
+const rows = computed(() => {
+  return people.slice((page.value - 1) * pageCount, (page.value) * pageCount)
+})
 </script>
+
 <template>
     <div class="p-4 border-2 bg-white border-gray-200 rounded">
         <div class="mb-4 rounded">
-            <UTable v-model="selected" :rows="people" :columns="columns">
-                <template #name-data="{ row }">
-                    <span :class="[selected.find(person => person.id === row.id) && 'text-primary-500 dark:text-primary-400']">{{ row.name }}</span>
-                </template>
-    
-                <template #actions-data="{ row }">
-                    <UDropdown :items="items(row)">
-                        <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
-                    </UDropdown>
+            <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
+                <UButton icon="i-heroicons-arrow-up-on-square-16-solid" color="blue"> Export</UButton>
+            </div>
+            <UTable :rows="rows" >
+                <template #caption>
+                  <caption class="p-3 bg-blue-600 text-white">STUDENT LOGS</caption>
                 </template>
             </UTable>
+            <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
+                <UPagination v-model="page" :page-count="pageCount" :total="people.length" />
+            </div>
         </div>
     </div>
 </template>
