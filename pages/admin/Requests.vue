@@ -1,4 +1,7 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: 'admin'
+})
 const columns = [{
   key: 'name',
   label: 'Name'

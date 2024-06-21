@@ -1,4 +1,11 @@
-<script setup lang="ts">
+<script setup>
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
+definePageMeta({
+  layout: 'admin'
+})
+
 const people = [{
   id: 1,
   name: 'Lindsay Walton',
@@ -85,13 +92,28 @@ const pageCount = 5
 const rows = computed(() => {
   return people.slice((page.value - 1) * pageCount, (page.value) * pageCount)
 })
+
+const downloadPDF = () => {
+      const doc = new jsPDF();
+      autoTable(doc, {
+        head: [['ID', 'Name', 'Title', 'Email', 'Role']],
+        body: people.map(product => [
+          product.id,
+          product.name,
+          product.title,
+          product.email,
+          product.role
+        ])
+      });
+      doc.save('table.pdf');
+    };
 </script>
 
 <template>
     <div class="p-4 border-2 bg-white border-gray-200 rounded">
         <div class="mb-4 rounded">
             <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
-                <UButton icon="i-heroicons-arrow-up-on-square-16-solid" color="blue"> Export</UButton>
+                <UButton icon="i-heroicons-arrow-up-on-square-16-solid" color="blue" @click="downloadPDF"> Export</UButton>
             </div>
             <UTable :rows="rows" >
                 <template #caption>
@@ -99,7 +121,7 @@ const rows = computed(() => {
                 </template>
             </UTable>
             <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
-                <UPagination v-model="page" :page-count="pageCount" :total="people.length" />
+              <UPagination v-model="page"  :active-button="{ variant: 'outline' }"  :inactive-button="{ color: 'gray' }" :page-count="pageCount"  :total="people.length" :ui="{default: {activeButton: {  color: 'blue',}}}"/>
             </div>
         </div>
     </div>
