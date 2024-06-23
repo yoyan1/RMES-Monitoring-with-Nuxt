@@ -1,7 +1,7 @@
 <template>
-  <UNotifications/>
+  <UNotifications  :ui="{progress: {base: 'absolute top-0 h-1'}}"/>
   <NuxtLayout>
     <NuxtPage />
-  </NuxtLayout>
+  </NuxtLayout >
   <UModals />
 </template>

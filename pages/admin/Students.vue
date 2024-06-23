@@ -1,68 +1,45 @@
-<script setup lang="ts">
+<script setup>
+import {collection, getDocs, addDoc} from 'firebase/firestore';
+import { db } from '~/compasables/firebase';
+
 definePageMeta({
   layout: 'admin'
 })
 
+const toast = useToast()
+const students = ref([])
+const loading = ref(false)
+
+onBeforeMount(async () => {
+  loading.value = true
+  try{
+    const querySnapshot = await getDocs(collection(db, "students"));
+    querySnapshot.forEach(student => {
+      students.value.push({id:student.id, ...student.data()})
+    });
+    loading.value = false
+  } catch(err){
+    loading.value = false
+    console.error("Error fetching students data:", err);
+  }
+})
+
 const isOpen = ref(false)
-const columns = [{
-  key: 'name',
-  label: 'Name'
-}, {
-  key: 'title',
-  label: 'Title'
-}, {
-  key: 'email',
-  label: 'Email'
-}, {
-  key: 'role',
-  label: 'Role'
-}, {
-  key: 'actions'
-}]
+const columns = [
+                {key: 'fullname', label: 'Name', sortable: true}, 
+                {key: 'lrn',  label: 'LRN'}, 
+                {key: 'date_of_birth',  label: 'Age', sortable: true}, 
+                {key: 'level',  label: 'Level', sortable: true}, 
+                {key: 'status',  label: 'Status', sortable: true}, 
+                {key: 'actions'}
+              ]
 
-const people = [{
-  id: 1,
-  name: 'Lindsay Walton',
-  title: 'Front-end Developer',
-  email: 'lindsay.walton@example.com',
-  role: 'Member'
-}, {
-  id: 2,
-  name: 'Courtney Henry',
-  title: 'Designer',
-  email: 'courtney.henry@example.com',
-  role: 'Admin'
-}, {
-  id: 3,
-  name: 'Tom Cook',
-  title: 'Director of Product',
-  email: 'tom.cook@example.com',
-  role: 'Member'
-}, {
-  id: 4,
-  name: 'Whitney Francis',
-  title: 'Copywriter',
-  email: 'whitney.francis@example.com',
-  role: 'Admin'
-}, {
-  id: 5,
-  name: 'Leonard Krasner',
-  title: 'Senior Designer',
-  email: 'leonard.krasner@example.com',
-  role: 'Owner'
-}, {
-  id: 6,
-  name: 'Floyd Miles',
-  title: 'Principal Designer',
-  email: 'floyd.miles@example.com',
-  role: 'Member'
-}]
 
-const items = (row) => [
+const items = () => [
   [{
     label: 'Edit',
     icon: 'i-heroicons-pencil-square-20-solid',
-    click: () => console.log('Edit', row.id)
+    // click: () => console.log('Edit', row.id)
   }, {
     label: 'Duplicate',
     icon: 'i-heroicons-document-duplicate-20-solid'
@@ -79,14 +56,15 @@ const items = (row) => [
 ]
 
 const q = ref('')
+const level = ref('')
 
 const filteredRows = computed(() => {
   if (!q.value) {
-    return people
+    return students.value
   }
 
-  return people.filter((person) => {
-    return Object.values(person).some((value) => {
+  return students.value.filter((student) => {
+    return Object.values(student).some((value) => {
       return String(value).toLowerCase().includes(q.value.toLowerCase())
     })
   })
@@ -96,26 +74,64 @@ const page = ref(1)
 const pageCount = 5
 
 const rows = computed(() => {
-  return people.slice((page.value - 1) * pageCount, (page.value) * pageCount)
+  return filteredRows.value.slice((page.value - 1) * pageCount, (page.value) * pageCount)
 })
+
+function calculateAge(birthDate) {
+    var today = new Date();
+    var birthDate = new Date(birthDate);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+}
+
+function select (row) {
+  const index = selected.value.findIndex((item) => item.id === row.id)
+  if (index === -1) {
+    selected.value.push(row)
+  } else {
+    selected.value.splice(index, 1)
+  }
+}
 
 const selected = ref()
 const levels = ['I', 'II', 'III', 'IV', 'V', 'VI']
+
+const year = ref()
+const archiveData = ref({})
+const load = ref(false)
+const archive = async() => {
+  load.value = true
+  archiveData.value = {...{school_year: year.value}, ...{list: students.value}}
+  try {
+    const docRef = await addDoc(collection(db, "archives"), archiveData.value);
+    console.log("Document written with ID: ", docRef.id);
+    toast.add({title: 'Successfuly added to archives'})
+    load.value = false
+    isOpen.value = false
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+}
 </script>
 <template>
     <div class="p-4 border-2 bg-white border-gray-200 rounded">
       <UModal v-model="isOpen" prevent-close>
         <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-            <template #header>
-              <div class="flex items-center justify-between">
-                <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-                  Modal
-                </h3>
-                <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpen = false" />
-              </div>
-            </template>
-            <Placeholder class="h-32" />
-          </UCard>
+          <template #header>
+            <div class="flex items-center justify-between">
+              <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                Archive students
+              </h3>
+              <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpen = false" />
+            </div>
+          </template>
+          <UInput v-model="year" :ui="{ color:{white: {outline: 'focus:ring-blue-600' }}  }" placeholder="Enter school year (2024-2025)"/> <br>
+          <UButton label="Archive" color="blue" :loading="load" @click="archive" required/>
+        </UCard>
       </UModal>
         <div class="mb-4 rounded">
             <div class="p-5 bg-blue-600 text-white">
@@ -126,17 +142,31 @@ const levels = ['I', 'II', 'III', 'IV', 'V', 'VI']
                         <UInput v-model="q" placeholder="Search name or lrn" :ui="{ color:{white: {outline: 'focus:ring-blue-600' }}  }" />
                     </div>
                     <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                        <UButton label="student" icon="i-heroicons-plus-16-solid" color="blue" @click="isOpen = true" />
+                        <UButton  icon="i-heroicons-plus-16-solid" color="blue" />
+                        <UButton  icon="i-heroicons-arrow-down-on-square-16-solid" color="blue" />
                          <USelectMenu v-model="selected" :options="levels" :ui="{ color:{white: {outline: 'focus:ring-blue-600' }}  }" placeholder="Select " />
-                        <div class="flex items-center space-x-3 w-full md:w-auto">
-                            <button  class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-red-600 focus:outline-none bg-white rounded-lg border border-red-600 hover:bg-gray-100 hover:text-red-700 focus:z-10 focus:ring-4 focus:ring-red-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white hover:bg-red-200" type="button">
-                                Delete all
-                            </button>
+                        <div class="flex items-center space-x-3 w-full md:w-auto"> 
+                            <UButton label="Archive all" icon="i-heroicons-archive-box-arrow-down-20-solid" color="blue" @click="isOpen = true"/>
                         </div>
                     </div>
                 </div>
-            <UTable loading :loading-state="{ icon: 'i-heroicons-arrow-path-20-solid', label: 'Loading...' }" :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No items.' }" v-model="selected" :rows="filteredRows" :columns="columns">
-    
+            <UTable :loading="loading" :loading-state="{ icon: 'i-heroicons-arrow-path-20-solid', label: 'Loading...' }" :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No items.' }" v-model="selected" @select="select" :rows="rows" :columns="columns">
+                <template #fullname-data="{row}">
+                  <div class="flex items-center gap-3">
+                    <UAvatar  size="sm"  :src="row.imageUrl "  alt="Avatar"/>
+                    <span class="font-semibold">{{ row.fullname }}</span>
+                  </div>
+                </template>
+                <template #date_of_birth-data="{row}">
+                  <div class="flex items-center gap-3">
+                    <span class="font-semibold">{{ calculateAge(row.date_of_birth) }}</span>
+                  </div>
+                </template>
+                <template #status-data="{row}">
+                  <div class="flex items-center gap-3">
+                    <span :class="row.status=='Present'? 'text-green-600 border-green-600 bg-green-100' : 'text-red-600 border-red-600 bg-red-100'" class="border px-1 rounded">{{ row.status }}</span>
+                  </div>
+                </template>
                 <template #actions-data="{ row }">
                     <UDropdown :items="items(row)">
                         <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
@@ -144,7 +174,7 @@ const levels = ['I', 'II', 'III', 'IV', 'V', 'VI']
                 </template>
             </UTable>
             <div class="flex justify-end">
-              <UPagination v-model="page"  :active-button="{ variant: 'outline' }"  :inactive-button="{ color: 'gray' }" :page-count="pageCount"  :total="people.length" :ui="{default: {activeButton: {  color: 'blue',}}}"/>
+              <UPagination v-model="page"  :active-button="{ variant: 'outline' }"  :inactive-button="{ color: 'gray' }" :page-count="pageCount"  :total="students.length" :ui="{default: {activeButton: {  color: 'blue',}}}"/>
             </div>
         </div>
     </div>
