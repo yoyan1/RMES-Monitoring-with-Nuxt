@@ -1,6 +1,7 @@
 <script setup>
 import {collection, getDocs, addDoc} from 'firebase/firestore';
 import { db } from '~/compasables/firebase';
+import AddOrUpdate from '~/components/form/AddOrUpdate.vue';
 
 definePageMeta({
   layout: 'admin'
@@ -109,6 +110,7 @@ const archive = async() => {
   try {
     const docRef = await addDoc(collection(db, "archives"), archiveData.value);
     console.log("Document written with ID: ", docRef.id);
+    
     toast.add({title: 'Successfuly added to archives'})
     load.value = false
     isOpen.value = false
@@ -142,7 +144,7 @@ const archive = async() => {
                         <UInput v-model="q" placeholder="Search name or lrn" :ui="{ color:{white: {outline: 'focus:ring-blue-600' }}  }" />
                     </div>
                     <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                        <UButton  icon="i-heroicons-plus-16-solid" color="blue" />
+                        <AddOrUpdate/>
                         <UButton  icon="i-heroicons-arrow-down-on-square-16-solid" color="blue" />
                          <USelectMenu v-model="selected" :options="levels" :ui="{ color:{white: {outline: 'focus:ring-blue-600' }}  }" placeholder="Select " />
                         <div class="flex items-center space-x-3 w-full md:w-auto"> 
