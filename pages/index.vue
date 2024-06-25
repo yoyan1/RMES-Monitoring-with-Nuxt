@@ -1,5 +1,10 @@
-<script setup lang="ts">
-import type { FormError, FormSubmitEvent } from '#ui/types'
+<script setup>
+import { useAuth } from '~/compasables/useAuth';
+
+const route = useRouter()
+
+const {login} = useAuth()
+const loading = ref(false)
 
 const state = reactive({
   email: undefined,
@@ -8,19 +13,17 @@ const state = reactive({
 
 const form = ref()
 
-async function onSubmit (event: FormSubmitEvent<any>) {
-  form.value.clear()
+async function onSubmit () {
+  loading.value = true
   try {
-    const response = await $fetch('...')
-    // ...
+    const response = await login(state.email, state.password)
+    console.log("success");
+    route.push('/admin')
+    loading.value = false
   } catch (err) {
-    if (err.statusCode === 422) {
-      form.value.setErrors(err.data.errors.map((err) => ({
-        // Map validation errors to { path: string, message: string }
-        message: err.message,
-        path: err.path,
-      })))
-    }
+    console.error("error", err);
+    loading.value = false
+
   }
 }
 </script>
@@ -42,7 +45,7 @@ async function onSubmit (event: FormSubmitEvent<any>) {
                     <UInput v-model="state.password" type="password" :ui="{ color:{white: {outline: 'focus:ring-blue-600' }}  }"  />
                   </UFormGroup>
               
-                  <UButton loading type="submit" color="blue"  :ui="{padding: { xl: 'px-10 py-10',}, size:{xl: 'text-1xl',}}">
+                  <UButton :loading="loading" type="submit" color="blue"  :ui="{padding: { xl: 'px-10 py-10',}, size:{xl: 'text-1xl',}}">
                     Submit
                   </UButton>
                 </UForm>

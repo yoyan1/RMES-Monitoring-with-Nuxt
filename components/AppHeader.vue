@@ -77,26 +77,29 @@ const items = [
                 <path clip-rule="evenodd" fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"></path>
                 </svg>
             </button>
-            <UDropdown :items="items" :ui="{ item: { disabled: 'cursor-text select-text' } }" :popper="{ placement: 'bottom-start' }">
-                <UAvatar src="https://avatars.githubusercontent.com/u/739984?v=4" />
-
-                <template #account="{ item }">
-                <div class="text-left">
-                    <p>
-                    Signed in as
-                    </p>
-                    <p class="truncate font-medium text-gray-900 dark:text-white">
-                    {{ item.label }}
-                    </p>
-                </div>
-                </template>
-
-                <template #item="{ item }">
-                <span class="truncate">{{ item.label }}</span>
-
-                <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 ms-auto" />
-                </template>
-            </UDropdown>
+            <div class="flex gap-5">
+              <UButton icon="i-heroicons-play-circle" color="white"/>
+              <UDropdown :items="items" :ui="{ item: { disabled: 'cursor-text select-text' } }" :popper="{ placement: 'bottom-start' }">
+                  <UAvatar src="https://avatars.githubusercontent.com/u/739984?v=4" />
+  
+                  <template #account="{ item }">
+                  <div class="text-left">
+                      <p>
+                      Signed in as
+                      </p>
+                      <p class="truncate font-medium text-gray-900 dark:text-white">
+                      {{ item.label }}
+                      </p>
+                  </div>
+                  </template>
+  
+                  <template #item="{ item }">
+                  <span class="truncate">{{ item.label }}</span>
+  
+                  <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 ms-auto" />
+                  </template>
+              </UDropdown>
+            </div>
             </div>
         </div>
     </nav>

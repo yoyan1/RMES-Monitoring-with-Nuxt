@@ -18,6 +18,7 @@
     "jspdf-autotable": "^3.8.2",
     "nuxt": "^3.12.2",
     "primevue": "^3.52.0",
+    "qrcode-vue3": "^1.6.8",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3"
   },

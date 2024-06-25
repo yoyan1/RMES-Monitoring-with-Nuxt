@@ -1,5 +1,12 @@
-<script setup lang="ts">
+<script setup>
+import useFirebaseStorage from '~/compasables/useFirebaseStorage';
+import useFirestore from '~/compasables/useFirestore';
+
 const isOpen = ref(false)
+const isLoading = ref(false)
+const {createDocument, updateDocument, error} = useFirestore('students')
+const { uploadError, uploadProgress, downloadURL, uploadFile } = useFirebaseStorage()
+
 
 const studentData = ref({
     fullname: '',
@@ -21,6 +28,51 @@ const studentData = ref({
     status: '',
 })
 
+const image = ref(null);
+let file;
+
+// Method to handle file change
+function onFileChange (e) {
+  file = e.target.files[0];
+  if (!file) {
+    console.log("no image selected/ or invalid image");
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    image.value = e.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+
+const onSubmit = async (isNew) =>{
+    isLoading.value = true
+    const path = 'studentsImage/'
+
+    //define if file has image 
+    if(file){
+        await uploadFile(file, path)
+        studentData.value.imageUrl = downloadURL
+    }
+
+    //define if new
+    if(isNew){
+        try{
+            createDocument(studentData.value)
+            isLoading.value = false                     
+            isOpen.value = false
+        } catch(error){
+            console.log(error);
+        }
+    } else{
+        try{
+            updateDocument( props.studentData.id, studentData.value,)
+        } catch(error){
+            console.log(error);
+        }
+
+    }
+
+}
 </script>
 
 <template>
@@ -38,7 +90,7 @@ const studentData = ref({
           </div>
         </template>
 
-        <form action="#" >
+        <form @submit="onSubmit">
             <div class="flex flex-col gap-10">
                 <div>
                     <p class="text-2xl text-gray-900 dark:text-white">Personal Details</p><br>
@@ -110,19 +162,19 @@ const studentData = ref({
                         <span class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Student Images</span>
                         <div class="flex flex-col gap-5 w-full">
                             <label for="dropzone-file" class="flex flex-col justify-center items-center w-full bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                <!-- <img class="h-60 max-w-full" :src="image" alt="image description" v-if="image"> -->
+                                <img class="h-60 max-w-full" :src="image" alt="image description" v-if="image">
                                 <!-- <img class="h-60 max-w-full" :src="studentData.imageUrl" alt="image description" v-else-if="studentData.imageUrl"> -->
                                 <div class="flex flex-col justify-center items-center pt-5 pb-6">
                                     
                                 </div>
                             </label>
-                            <UInput type="file" size="sm" icon="i-heroicons-folder" />
+                            <input type="file" size="sm" @change="onFileChange"/>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
-              <UButton label="Add student" color="blue"/>
+              <UButton label="Add student" color="blue" @click="onSubmit(true)" :loading="isLoading"/>
               <UButton label="Cancel" color="red" @click="isOpen = false"/>
             </div>
         </form>

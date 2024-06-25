@@ -6,6 +6,7 @@ definePageMeta({
   layout: 'admin'
 })
 
+const isOpen = ref(false)
 const loading = ref(false)
 const { id } = useRoute().params
 const archive = ref()
@@ -56,43 +57,6 @@ const columns = [{
   key: 'actions'
 }]
 
-const people = [{
-  id: 1,
-  name: 'Lindsay Walton',
-  title: 'Front-end Developer',
-  email: 'lindsay.walton@example.com',
-  role: 'Member'
-}, {
-  id: 2,
-  name: 'Courtney Henry',
-  title: 'Designer',
-  email: 'courtney.henry@example.com',
-  role: 'Admin'
-}, {
-  id: 3,
-  name: 'Tom Cook',
-  title: 'Director of Product',
-  email: 'tom.cook@example.com',
-  role: 'Member'
-}, {
-  id: 4,
-  name: 'Whitney Francis',
-  title: 'Copywriter',
-  email: 'whitney.francis@example.com',
-  role: 'Admin'
-}, {
-  id: 5,
-  name: 'Leonard Krasner',
-  title: 'Senior Designer',
-  email: 'leonard.krasner@example.com',
-  role: 'Owner'
-}, {
-  id: 6,
-  name: 'Floyd Miles',
-  title: 'Principal Designer',
-  email: 'floyd.miles@example.com',
-  role: 'Member'
-}]
 
 const items = (row) => [
   [{
@@ -139,6 +103,24 @@ const selected = ref([])
 <template>
   <UBreadcrumb :links="links" :ui="{active: 'text-blue-500 dark:text-blue-400'}"/>
     <div class="p-4 border-2 bg-white border-gray-200 rounded">
+      <UModal v-model="isOpen" prevent-close>
+        <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+          <template #header>
+            <div class="flex items-center justify-between">
+              <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                Unarchive {{students.length}} students
+              </h3>
+              <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpen = false" />
+            </div>
+          </template>
+          <div class="flex flex-col gap-5">
+            <span>Cick unarchive to proceed!</span>
+            <div class="flex justify-end">
+              <UButton label="Unarchive" color="blue" :loading="load" @click="archive" required/>
+            </div>
+          </div>
+        </UCard>
+      </UModal>
       <div class="p-5 bg-blue-500 text-white">
         <h1 class="text-2xl font-semibold">Archive Students</h1>
         <span>(S.Y. ({{ archive? archive.school_year : 'loading..' }}))</span>
@@ -150,7 +132,7 @@ const selected = ref([])
               </div>
               <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                   <div class="flex items-center space-x-3 w-full md:w-auto"> 
-                      <UButton label="Unarchive" icon="i-heroicons-archive-box-arrow-down-20-solid" color="blue"/>
+                      <UButton label="Unarchive" icon="i-heroicons-archive-box-arrow-down-20-solid" color="blue" @click="isOpen= true"/>
                   </div>
               </div>
           </div>

@@ -1,11 +1,13 @@
 <script setup>
-import {collection, getDocs, addDoc} from 'firebase/firestore';
+import {collection, doc, getDocs, addDoc, updateDoc, query, where} from 'firebase/firestore';
 import { db } from '~/compasables/firebase';
 import AddOrUpdate from '~/components/form/AddOrUpdate.vue';
+import PreviewStudent from '~/components/studentComponents/PreviewStudent.vue';
 
 definePageMeta({
   layout: 'admin'
 })
+
 
 const toast = useToast()
 const students = ref([])
@@ -89,15 +91,6 @@ function calculateAge(birthDate) {
     return age;
 }
 
-function select (row) {
-  const index = selected.value.findIndex((item) => item.id === row.id)
-  if (index === -1) {
-    selected.value.push(row)
-  } else {
-    selected.value.splice(index, 1)
-  }
-}
-
 const selected = ref()
 const levels = ['I', 'II', 'III', 'IV', 'V', 'VI']
 
@@ -106,18 +99,58 @@ const archiveData = ref({})
 const load = ref(false)
 const archive = async() => {
   load.value = true
-  archiveData.value = {...{school_year: year.value}, ...{list: students.value}}
-  try {
-    const docRef = await addDoc(collection(db, "archives"), archiveData.value);
-    console.log("Document written with ID: ", docRef.id);
-    
-    toast.add({title: 'Successfuly added to archives'})
-    load.value = false
-    isOpen.value = false
-  } catch (e) {
-    console.error("Error adding document: ", e);
-  }
+  const queryRecord = query(
+        collection(db, 'archives'),
+        where('school_year', '==', year.value),
+      );
+      
+      const archivesSnapchat = await getDocs(queryRecord);
+      if(archivesSnapchat.empty){
+        try {
+        archiveData.value = {...{school_year: year.value}, ...{list: students.value}}  
+        const docRef = await addDoc(collection(db, "archives"), archiveData.value);
+        console.log("Document written with ID: ", docRef.id);
+        
+        toast.add({title: 'Successfuly added to archives'})
+        load.value = false
+        isOpen.value = false
+      } catch (e) {
+        console.error("Error adding document: ", e);
+        toast.add({title: 'Added to archives error'})
+      }
+    } else{
+      // for (const record of archivesSnapchat.docs) {
+      //       try {
+      //         const docRef = doc(db, 'archives', record.id);
+      //         archiveData.value = {...record.data(), list: {...record.list, ...students.value}}
+      //         await updateDoc(docRef, archiveData.value);
+              load.value = false
+              isOpen.value = false
+              toast.add({title: 'Successfuly added to archives '+year.value})
+      
+      //       } catch (err) {
+      //         load.value = false
+      //         isOpen.value = false
+      //         toast.add({title: 'Added to archives '+year.value+' failed'})
+      //         console.error(err);
+      //       }
+      // }
+
+    }
 }
+
+const isOpenPreview = ref(false)
+const rowOpen = ref()
+function select (row) {
+  isOpenPreview.value = true
+  // const index = selected.value.findIndex((item) => item.id === row.id)
+  // if (index === -1) {
+    rowOpen.value = row
+  // } else {
+    
+  // }
+}
+
 </script>
 <template>
     <div class="p-4 border-2 bg-white border-gray-200 rounded">
@@ -135,6 +168,7 @@ const archive = async() => {
           <UButton label="Archive" color="blue" :loading="load" @click="archive" required/>
         </UCard>
       </UModal>
+      <PreviewStudent :isOpen="isOpenPreview" :row="rowOpen" @close="isOpenPreview = false"/>
         <div class="mb-4 rounded">
             <div class="p-5 bg-blue-600 text-white">
                 <h1 class="text-xl">STUDENTS</h1>
@@ -152,7 +186,7 @@ const archive = async() => {
                         </div>
                     </div>
                 </div>
-            <UTable :loading="loading" :loading-state="{ icon: 'i-heroicons-arrow-path-20-solid', label: 'Loading...' }" :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No items.' }" v-model="selected" @select="select" :rows="rows" :columns="columns">
+            <UTable :loading="loading" :loading-state="{ icon: 'i-heroicons-arrow-path-20-solid', label: 'Loading...' }" :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No items.' }" v-model="selected" @select="select" :rows="rows" :columns="columns" >
                 <template #fullname-data="{row}">
                   <div class="flex items-center gap-3">
                     <UAvatar  size="sm"  :src="row.imageUrl "  alt="Avatar"/>
