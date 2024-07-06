@@ -15,7 +15,7 @@ const emits = defineEmits()
           <template #header>
             <div class="flex items-center justify-between">
               <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-                Archive students
+                Students
               </h3>
               <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="emits('close')" />
             </div>
@@ -35,55 +35,55 @@ const emits = defineEmits()
                 </div>
                 <div class="flex justify-between gap-10">
                     <dl class="sm:mb-5 border shadow px-6 py-3 rounded" style="width: 100vh">
-                        <dt class="mb-2 text-xl leading-none text-gray-900 dark:text-white"><b>Student Details</b></dt>
+                        <dt class="mb-2 text-xl leading-none text-gray-900 dark:text-white"><span>Student Details</span></dt>
                         <dd class="mb-4  sm:mb-5 dark:text-gray-400 ">
                             <div class="flex justify-between">
                                 <div class="flex flex-col gap-5 py-2">
                                     <div>
                                         <span class="font-semibold text-gray-500">Fullname</span><br>
-                                        <b class="text-gray-700 text-base">{{ row.fullname }}</b>
+                                        <span class="text-gray-700 text-base">{{ row.fullname }}</span>
                                     </div>
                                     <div>
                                         <span class="font-semibold text-gray-500">LRN (<i>learner's Reference Number</i>)</span><br>
-                                        <b class="text-gray-700 text-base">{{ row.lrn }}</b>
+                                        <span class="text-gray-700 text-base">{{ row.lrn }}</span>
                                     </div>
                                     <div>
                                         <span class="font-semibold text-gray-500">Adviser</span><br>
-                                        <b class="text-gray-700 text-base">Rosmarie Panilagao</b>
+                                        <span class="text-gray-700 text-base">Rosmarie Panilagao</span>
                                     </div>
                                     <div>
                                         <span class="font-semibold text-gray-500">Date of Birth</span><br>
-                                        <b class="text-gray-700 text-sm">{{ row.date_of_birth }}</b>
+                                        <span class="text-gray-700 text-sm">{{ row.date_of_birth }}</span>
                                     </div>
                                     <!-- <div>
                                         <span class="font-semibold text-gray-500">Province</span><br>
-                                        <b class="text-gray-700 text-base">{{ row.province }}</b>
+                                        <span class="text-gray-700 text-base">{{ row.province }}</span>
                                     </div>
                                     <div>
                                         <span class="font-semibold text-gray-500">Barangay</span><br>
-                                        <b class="text-gray-700 text-base">{{ row.barangay }}</b>
+                                        <span class="text-gray-700 text-base">{{ row.barangay }}</span>
                                     </div> -->
                                 </div>
                                 <div class="flex flex-col py-2 gap-5">
                                     <div>
                                         <span class="font-semibold text-gray-500">Grade/Section</span><br>
-                                        <b class="text-gray-700 text-base">Grade: {{ row.level }} - {{ row.section }}</b>
+                                        <span class="text-gray-700 text-base">Grade: {{ row.level }} - {{ row.section }}</span>
                                     </div>
                                     <div>
                                         <span class="font-semibold text-gray-500">Status</span><br>
-                                        <b class="text-gray-700 text-base">present</b>
+                                        <span class="text-gray-700 text-base">present</span>
                                     </div>
                                     <!-- <div>
                                         <span class="font-semibold text-white">gap</span><br>
-                                        <b class="text-white text-base">gap</b>
+                                        <span class="text-white text-base">gap</span>
                                     </div>
                                     <div>
                                         <span class="font-semibold text-gray-500">Municipality</span><br>
-                                        <b class="text-gray-700 text-base">{{ row.municipality }}</b>
+                                        <span class="text-gray-700 text-base">{{ row.municipality }}</span>
                                     </div>
                                     <div>
                                         <span class="font-semibold text-gray-500">Zone</span><br>
-                                        <b class="text-gray-700 text-base">{{ row.zone }}</b>
+                                        <span class="text-gray-700 text-base">{{ row.zone }}</span>
                                     </div> -->
                                 </div>
                             </div>
@@ -91,7 +91,7 @@ const emits = defineEmits()
                     </dl>
                     <dl class="sm:mb-5 border shadow px-6 py-3 rounded" style="width: 70vh">
                         <dt class="mb-2 text-xl leading-none text-gray-900 dark:text-white flex justify-between">
-                            <b>Attendance Record</b>
+                            <span>Attendance Record</span>
                             <div class="flex gap-1">
                                 <button  class="text-base border px-5 text-blue-600 bg-blue-100 rounded">all</button>
                                 <button  class="text-base border px-5 bg-gray-100 rounded">today</button>

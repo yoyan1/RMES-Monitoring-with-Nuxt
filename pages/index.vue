@@ -1,31 +1,31 @@
 <script setup>
-import { useAuth } from '~/compasables/useAuth';
+// import { useAuth } from '~/compasables/useAuth';
 
-const route = useRouter()
+// const route = useRouter()
 
-const {login} = useAuth()
-const loading = ref(false)
+// const {login} = useAuth()
+// const loading = ref(false)
 
-const state = reactive({
-  email: undefined,
-  password: undefined
-})
+// const state = reactive({
+//   email: undefined,
+//   password: undefined
+// })
 
-const form = ref()
+// const form = ref()
 
-async function onSubmit () {
-  loading.value = true
-  try {
-    const response = await login(state.email, state.password)
-    console.log("success");
-    route.push('/admin')
-    loading.value = false
-  } catch (err) {
-    console.error("error", err);
-    loading.value = false
+// async function onSubmit () {
+//   loading.value = true
+//   try {
+//     const response = await login(state.email, state.password)
+//     console.log("success");
+//     route.push('/admin')
+//     loading.value = false
+//   } catch (err) {
+//     console.error("error", err);
+//     loading.value = false
 
-  }
-}
+//   }
+// }
 </script>
 
 <template>
@@ -36,7 +36,7 @@ async function onSubmit () {
             <h4>Welcome, Admin!</h4>
             <p>Sign in to continue</p>
             <div class="w-60 py-5">
-                <UForm ref="form" :state="state" @submit="onSubmit" class="flex flex-col gap-5">
+                <!-- <UForm ref="form" :state="state" @submit="onSubmit" class="flex flex-col gap-5">
                   <UFormGroup label="Email" name="email">
                     <UInput v-model="state.email"  :ui="{ color:{white: {outline: 'focus:ring-blue-600' }}  }" />
                   </UFormGroup>
@@ -48,7 +48,7 @@ async function onSubmit () {
                   <UButton :loading="loading" type="submit" color="blue"  :ui="{padding: { xl: 'px-10 py-10',}, size:{xl: 'text-1xl',}}">
                     Submit
                   </UButton>
-                </UForm>
+                </UForm> -->
             </div>
         </div>
     </div>

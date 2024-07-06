@@ -1,9 +1,11 @@
 // composables/useFirestore.js
 import { ref, onUnmounted } from 'vue';
 import { collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
-import { db } from './firebase';
+import { useFirestore } from 'vuefire';
 
-export default function useFirestore(collectionName) {
+const db = useFirestore()
+
+export default function useStore(collectionName) {
   const documents = ref([]);
   const error = ref(null);
   const isLoading = ref(false);

@@ -2,32 +2,17 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import {collection, getDocs} from 'firebase/firestore';
-import { db } from '~/compasables/firebase';
+import { useFirestore, useCollection } from 'vuefire'
+
 
 definePageMeta({
   layout: 'admin'
 })
 
+const db = useFirestore()
 const toast = useToast()
-const records = ref([])
+const records = useCollection(collection(db, 'students_record'))
 const loading = ref(false)
-
-onBeforeMount(async () => {
-  loading.value = true
-  try{
-    const querySnapshot = await getDocs(collection(db, "students_record"));
-    const index = ref(0)
-    querySnapshot.forEach(record => {
-      index.value += 1
-      records.value.push({id:index.value, ...record.data()})
-    });
-    loading.value = false
-  } catch(err){
-    loading.value = false
-    console.error("Error fetching students data:", err);
-  }
-})
-
 
 const page = ref(1)
 const pageCount = 5
@@ -37,7 +22,6 @@ const rows = computed(() => {
 })
 
 const columns = [
-  {key: 'id', label: 'ID', sortable: true},
   {key: 'name', label: 'Name', sortable: true},
   {key: 'status', label: 'Status'},
   {key: 'time_in', label: 'Time in'},

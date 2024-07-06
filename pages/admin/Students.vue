@@ -1,31 +1,19 @@
 <script setup>
 import {collection, doc, getDocs, addDoc, updateDoc, query, where} from 'firebase/firestore';
-import { db } from '~/compasables/firebase';
+import { useFirestore, useCollection } from 'vuefire';
 import AddOrUpdate from '~/components/form/AddOrUpdate.vue';
 import PreviewStudent from '~/components/studentComponents/PreviewStudent.vue';
+import ImportStudents from '~/components/form/ImportStudents.vue';
 
 definePageMeta({
   layout: 'admin'
 })
 
-
+const db = useFirestore()
 const toast = useToast()
-const students = ref([])
+const students = useCollection(collection(db, 'students'))
 const loading = ref(false)
 
-onBeforeMount(async () => {
-  loading.value = true
-  try{
-    const querySnapshot = await getDocs(collection(db, "students"));
-    querySnapshot.forEach(student => {
-      students.value.push({id:student.id, ...student.data()})
-    });
-    loading.value = false
-  } catch(err){
-    loading.value = false
-    console.error("Error fetching students data:", err);
-  }
-})
 
 const isOpen = ref(false)
 const columns = [
@@ -179,7 +167,7 @@ function select (row) {
                     </div>
                     <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                         <AddOrUpdate/>
-                        <UButton  icon="i-heroicons-arrow-down-on-square-16-solid" color="blue" />
+                        <ImportStudents/>
                          <USelectMenu v-model="selected" :options="levels" :ui="{ color:{white: {outline: 'focus:ring-blue-600' }}  }" placeholder="Select " />
                         <div class="flex items-center space-x-3 w-full md:w-auto"> 
                             <UButton label="Archive all" icon="i-heroicons-archive-box-arrow-down-20-solid" color="blue" @click="isOpen = true"/>

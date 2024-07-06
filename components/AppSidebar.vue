@@ -52,12 +52,12 @@ const routes = ref([
                 <ul>
                     <li>
                         <h1 class="text-bold">Home</h1>
-                        <NuxtLink active-class="bg-blue-600 text-white" to="/admin" class="flex items-center gap-3 p-2 text-gray-900 rounded-lg dark:text-white hover:text-white hover:bg-blue-600 dark:hover:bg-blue-700 group"><Icon name="heroicons:home-modern-solid"/> Dashboard</NuxtLink>
+                        <NuxtLink active-class="bg-blue-800 text-white" to="/admin" class="flex items-center gap-3 p-2 text-gray-600 rounded dark:text-white hover:text-white hover:bg-blue-600 dark:hover:bg-blue-800 group"><Icon name="heroicons:home-modern-solid"/> Dashboard</NuxtLink>
                     </li>
                     <li>
                         <h1 class="text-bold">Pages</h1>
                         <div v-for="route in routes" :key="route.to">
-                            <NuxtLink active-class="bg-blue-600 text-white" :to="route.to" class="flex items-center gap-3 p-2 text-gray-900 rounded-lg dark:text-white hover:text-white hover:bg-blue-600 dark:hover:bg-blue-700 group"><Icon :name="route.icon" class="p-3"/> {{ route.label }}</NuxtLink>
+                            <NuxtLink active-class="bg-blue-800 text-white" :to="route.to" class="flex items-center gap-3 p-2 text-gray-600 rounded dark:text-white hover:text-white hover:bg-blue-600 dark:hover:bg-blue-800 group"><Icon :name="route.icon" class="p-3"/> {{ route.label }}</NuxtLink>
                         </div>
                   </li>
                 </ul>

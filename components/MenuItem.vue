@@ -4,7 +4,7 @@
         <Menu :model="items">
             <template #item="{ item, props }">
                 <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
-                    <a v-ripple :href="href" v-bind="props.action" @click="navigate" class="font-bold hover:text-white">
+                    <a v-ripple :href="href" v-bind="props.action" @click="navigate" class="text-bold text-gray-500 hover:text-white">
                         <span :class="item.icon" />
                         <span class="ml-2">{{ item.label }}</span>
                     </a>

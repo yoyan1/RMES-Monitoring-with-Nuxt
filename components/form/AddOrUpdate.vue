@@ -1,11 +1,11 @@
 <script setup>
-import useFirebaseStorage from '~/compasables/useFirebaseStorage';
-import useFirestore from '~/compasables/useFirestore';
+import useStorage from '~/compasables/useStorage';
+import useStore from '~/compasables/useStore';
 
 const isOpen = ref(false)
 const isLoading = ref(false)
-const {createDocument, updateDocument, error} = useFirestore('students')
-const { uploadError, uploadProgress, downloadURL, uploadFile } = useFirebaseStorage()
+const {createDocument, updateDocument, error} = useStore('students')
+const { uploadError, uploadProgress, downloadURL, uploadFile } = useStorage()
 
 
 const studentData = ref({
@@ -53,7 +53,6 @@ const onSubmit = async (isNew) =>{
         await uploadFile(file, path)
         studentData.value.imageUrl = downloadURL
     }
-
     //define if new
     if(isNew){
         try{
