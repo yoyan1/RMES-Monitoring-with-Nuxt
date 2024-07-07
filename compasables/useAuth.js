@@ -1,8 +1,9 @@
 // composables/useAuth.js
 import { ref } from 'vue';
-import { auth } from './firebase';
+import { useFirebaseAuth } from 'vuefire';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 
+const auth = useFirebaseAuth();
 const user = ref(null);
 const isAuthenticated = ref(false);
 
@@ -40,5 +41,10 @@ export function useAuth() {
     });
   };
 
-  return { user, isAuthenticated, login, logout, checkAuthStatus };
+  return { 
+    user, 
+    isAuthenticated, 
+    login, 
+    logout, 
+    checkAuthStatus };
 }

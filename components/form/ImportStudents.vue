@@ -50,7 +50,7 @@ const uploadFile = async () => {
         // Map CSV fields to Firestore 
             const studentData = {
                 fullname: fileData.fullname,
-                gender: fileData.gender,
+                gender: fileData.gender || 'N/A',
                 date_of_birth: fileData.dateofbirth,
                 province: fileData.province,
                 municipality: fileData.municipality,
@@ -66,32 +66,6 @@ const uploadFile = async () => {
                 // adviser_id: props.staffId,
                 status: 'new',
             };
-//         const cleanedData = {
-//             section: fileData.sec || "N/A",
-//             college: fileData.college || "N/A",
-//             subArea: fileData.subarea || "N/A",
-//             notes: fileData["NOTE/Remarks"] || "N/A",
-//             subject: fileData.subject || "N/A",
-//             callNumber: fileData.callnumber || "N/A",
-//             title: fileData.title || "N/A",
-//             author: fileData.author || "N/A",
-//             copyright: fileData.copyright == "N/A",
-//             accountNumber: fileData.accountnumber || "N/A",
-//             additionalTitle: fileData.title_1 || "N/A",
-//             volume: fileData.volume || "N/A",
-//             additionalSubject: fileData.subject_1 || "N/A",
-//             publisher: fileData.publisher || "N/A",
-//             dealer: fileData.dealer || "N/A",
-//             price: parsePrice(fileData.price), // Clean and parse the price field
-//             totalPrice: parsePrice(fileData.totalprice), // Clean and parse the totalPrice field
-//             physDesc: fileData.physdesc || "N/A",
-//             bibliography: fileData["Bibliography/Notes"] || "N/A",
-//             isbn: fileData.isbn || "N/A",
-//             pubPlace: fileData.pubplace || "N/A",
-//             addedEntryTitle: fileData["AddedEntryTitle / Series Title"] || "N/A",
-//             remarks: fileData.remarks || "N/A",
-//             stocks: fileData.stocks || "N/A",
-//         };
         batch.set(newDocRef, studentData);
     });
     // Commit the batch

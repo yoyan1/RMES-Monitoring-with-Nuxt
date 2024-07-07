@@ -26,7 +26,11 @@ const emits = defineEmits()
                             <img class="w-28 h-28 rounded-full mb-3 shadow-lg" :src="row.imageUrl" alt="image" v-if="row.imageUrl"/>
                             <img class="w-28 h-28 rounded-full mb-3 shadow-lg" src="../components/images/default.jpg" alt="default" v-else/>
                             <div>
-                                <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{row.fullname}} <i class="px-5 rounded-full text-base" :class="row.status == 'Present'? 'bg-green-200 text-green-600' : 'bg-red-200 text-red-600'">{{ row.status }}</i></h5>
+                                <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{row.fullname}} 
+                                    <i class="px-5 rounded-full text-base bg-green-200" v-if="row.status == 'Present'">{{ row.status }}</i>
+                                    <i class="px-5 rounded-full text-base bg-red-200" v-else-if="row.status == 'Out of school'">{{ row.status }}</i>
+                                    <i class="px-5 rounded-full text-base bg-gray-200" v-else>{{ row.status }}</i>
+                                </h5>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">Grade {{ row.level }}</span><br>
                                 <span class="text-base text-blue-500 dark:text-gray-400"><i class="pi pi-map-marker"></i> {{ row.street }}</span>
                             </div>

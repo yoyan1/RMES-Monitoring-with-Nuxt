@@ -51,19 +51,19 @@ const downloadPDF = () => {
 </script>
 
 <template>
-    <div class="p-4 border-2 bg-white border-gray-200 rounded">
-        <div class="mb-4 rounded">
-            <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
-                <UButton icon="i-heroicons-arrow-up-on-square-16-solid" color="blue" @click="downloadPDF" :loading="loadExport"> Export</UButton>
-            </div>
+    <div class="px-4">
+        <div class="mb-4 rounded-md">
+          <div class="flex justify-between px-3 py-3.5 bg-white shadow ronded mb-5">
+            <h1 class="text-xl">Students Attendance</h1>
+            <UButton icon="i-heroicons-arrow-up-on-square-16-solid" color="blue" @click="downloadPDF" :loading="loadExport"> Export</UButton>
+          </div>
+          <div class="bg-white p-3 shadow  flex flex-col rounded-md">
             <UTable :loading="loading" :rows="rows" :columns="columns">
-                <template #caption>
-                  <caption class="p-3 bg-blue-600 text-white">STUDENT LOGS</caption>
-                </template>
             </UTable>
             <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
               <UPagination v-model="page"  :active-button="{ variant: 'outline' }"  :inactive-button="{ color: 'gray' }" :page-count="pageCount"  :total="records.length" :ui="{default: {activeButton: {  color: 'blue',}}}"/>
             </div>
+          </div>
         </div>
     </div>
 </template>

@@ -141,7 +141,7 @@ function select (row) {
 
 </script>
 <template>
-    <div class="p-4 border-2 bg-white border-gray-200 rounded">
+    <div class="px-4">
       <UModal v-model="isOpen" prevent-close>
         <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
           <template #header>
@@ -158,10 +158,10 @@ function select (row) {
       </UModal>
       <PreviewStudent :isOpen="isOpenPreview" :row="rowOpen" @close="isOpenPreview = false"/>
         <div class="mb-4 rounded">
-            <div class="p-5 bg-blue-600 text-white">
+            <!-- <div class="p-5 bg-blue-600 text-white"> -->
                 <h1 class="text-xl">STUDENTS</h1>
-            </div>
-            <div class="flex flex-col md:flex-row items-stretch md:items-center md:space-x-3 space-y-3 md:space-y-0 justify-between border-t dark:border-gray-700 h-20 max-h-20 px-5">
+            <!-- </div> -->
+            <div class="flex items-stretch md:items-center md:space-x-3 space-y-3 md:space-y-0 justify-between h-20 max-h-20 px-5 mb-5 bg-white shadow rounded-md">
                     <div class="w-full md:w-1/2">
                         <UInput v-model="q" placeholder="Search name or lrn" :ui="{ color:{white: {outline: 'focus:ring-blue-600' }}  }" />
                     </div>
@@ -174,32 +174,34 @@ function select (row) {
                         </div>
                     </div>
                 </div>
-            <UTable :loading="loading" :loading-state="{ icon: 'i-heroicons-arrow-path-20-solid', label: 'Loading...' }" :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No items.' }" v-model="selected" @select="select" :rows="rows" :columns="columns" >
-                <template #fullname-data="{row}">
-                  <div class="flex items-center gap-3">
-                    <UAvatar  size="sm"  :src="row.imageUrl "  alt="Avatar"/>
-                    <span class="font-semibold">{{ row.fullname }}</span>
+                <div class="bg-white p-5 shadow rounded-md">
+                  <UTable :loading="loading" :loading-state="{ icon: 'i-heroicons-arrow-path-20-solid', label: 'Loading...' }" :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No items.' }" v-model="selected" @select="select" :rows="rows" :columns="columns" cl>
+                      <template #fullname-data="{row}">
+                        <div class="flex items-center gap-3">
+                          <UAvatar  size="sm"  :src="row.imageUrl "  alt="Avatar"/>
+                          <span class="font-semibold">{{ row.fullname }}</span>
+                        </div>
+                      </template>
+                      <template #date_of_birth-data="{row}">
+                        <div class="flex items-center gap-3">
+                          <span class="font-semibold">{{ calculateAge(row.date_of_birth) }}</span>
+                        </div>
+                      </template>
+                      <template #status-data="{row}">
+                        <div class="flex items-center gap-3">
+                          <span :class="row.status=='Present'? 'text-green-600 border-green-600 bg-green-100' : 'text-red-600 border-red-600 bg-red-100'" class="border px-1 rounded">{{ row.status }}</span>
+                        </div>
+                      </template>
+                      <template #actions-data="{ row }">
+                          <UDropdown :items="items(row)">
+                              <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+                          </UDropdown>
+                      </template>
+                  </UTable>
+                  <div class="flex justify-end">
+                    <UPagination v-model="page"  :active-button="{ variant: 'outline' }"  :inactive-button="{ color: 'gray' }" :page-count="pageCount"  :total="students.length" :ui="{default: {activeButton: {  color: 'blue',}}}"/>
                   </div>
-                </template>
-                <template #date_of_birth-data="{row}">
-                  <div class="flex items-center gap-3">
-                    <span class="font-semibold">{{ calculateAge(row.date_of_birth) }}</span>
-                  </div>
-                </template>
-                <template #status-data="{row}">
-                  <div class="flex items-center gap-3">
-                    <span :class="row.status=='Present'? 'text-green-600 border-green-600 bg-green-100' : 'text-red-600 border-red-600 bg-red-100'" class="border px-1 rounded">{{ row.status }}</span>
-                  </div>
-                </template>
-                <template #actions-data="{ row }">
-                    <UDropdown :items="items(row)">
-                        <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
-                    </UDropdown>
-                </template>
-            </UTable>
-            <div class="flex justify-end">
-              <UPagination v-model="page"  :active-button="{ variant: 'outline' }"  :inactive-button="{ color: 'gray' }" :page-count="pageCount"  :total="students.length" :ui="{default: {activeButton: {  color: 'blue',}}}"/>
-            </div>
+                </div>
         </div>
     </div>
 </template>

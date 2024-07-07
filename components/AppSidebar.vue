@@ -4,32 +4,32 @@ const router = useRouter()
 const routes = ref([
             {
                 label: 'Students',
-                icon: 'heroicons:academic-cap-16-solid',
+                icon: 'heroicons:academic-cap',
                 to: '/admin/students'
             },
             {
                 label: 'Attendance',
-                icon: 'heroicons:calendar-days-solid',
+                icon: 'heroicons:calendar',
                 to: '/admin/attendance'
             },
             {
                 label: 'Request',
-                icon: 'heroicons:inbox-arrow-down-16-solid',
+                icon: 'heroicons:inbox-arrow-down',
                 to: '/admin/requests'
             },
             {
                 label: 'Archives',
-                icon: 'heroicons:archive-box-20-solid',
+                icon: 'heroicons:archive-box',
                 to: '/admin/archive'
             },
             {
                 label: 'Accounts',
-                icon: 'heroicons:user-group-solid',
+                icon: 'heroicons:user-group',
                 to: '/admin/accounts'
             },
             {
                 label: 'Setting',
-                icon: 'heroicons:cog-6-tooth-20-solid',
+                icon: 'heroicons:cog-6-tooth',
                 to: '/admin/setting'
             }
     
@@ -37,7 +37,7 @@ const routes = ref([
 </script>
 <template>
     <div>
-        <aside class="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidenav" id="drawer-navigation" >
+        <aside class="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white  md:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidenav" id="drawer-navigation" >
             <div class="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
                 <form action="#" method="GET" class="md:hidden mb-2">
                 <label for="sidebar-search" class="sr-only">Search</label>
@@ -51,13 +51,12 @@ const routes = ref([
                 </form>
                 <ul>
                     <li>
-                        <h1 class="text-bold">Home</h1>
-                        <NuxtLink active-class="bg-blue-800 text-white" to="/admin" class="flex items-center gap-3 p-2 text-gray-600 rounded dark:text-white hover:text-white hover:bg-blue-600 dark:hover:bg-blue-800 group"><Icon name="heroicons:home-modern-solid"/> Dashboard</NuxtLink>
+                        <NuxtLink active-class="bg-blue-400 text-white" to="/admin" class="flex items-center gap-3 p-2 text-gray-600 rounded dark:text-white hover:text-white hover:bg-blue-600 dark:hover:bg-blue-600 group"><Icon name="heroicons:home-modern" class="p-3 font-bold"/> Dashboard</NuxtLink>
                     </li>
                     <li>
-                        <h1 class="text-bold">Pages</h1>
+                        <h1 class="font-bold text-gray-400 text-md py-3">Pages</h1>
                         <div v-for="route in routes" :key="route.to">
-                            <NuxtLink active-class="bg-blue-800 text-white" :to="route.to" class="flex items-center gap-3 p-2 text-gray-600 rounded dark:text-white hover:text-white hover:bg-blue-600 dark:hover:bg-blue-800 group"><Icon :name="route.icon" class="p-3"/> {{ route.label }}</NuxtLink>
+                            <NuxtLink active-class="bg-blue-400 text-white" :to="route.to" class="flex items-center gap-3 p-2 text-gray-600 rounded dark:text-white hover:text-white hover:bg-blue-600 dark:hover:bg-blue-600 group"><Icon :name="route.icon" class="p-3 font-bold"/> {{ route.label }}</NuxtLink>
                         </div>
                   </li>
                 </ul>

@@ -25,7 +25,7 @@ const studentData = ref({
     lrn: 0,
     imageUrl: '',
     // adviser_id: props.staffId,
-    status: '',
+    status: 'new',
 })
 
 const image = ref(null);
