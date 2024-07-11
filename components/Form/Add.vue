@@ -1,11 +1,10 @@
 <script setup>
-import useStorage from '~/compasables/useStorage';
 import useStore from '~/compasables/useStore';
 
 const isOpen = ref(false)
 const isLoading = ref(false)
 const {createDocument, updateDocument, error} = useStore('students')
-const { uploadError, uploadProgress, downloadURL, uploadFile } = useStorage()
+// const { uploadError, uploadProgress, downloadURL, uploadFile } = useStorage()
 
 
 const studentData = ref({
@@ -48,28 +47,28 @@ const onSubmit = async (isNew) =>{
     isLoading.value = true
     const path = 'studentsImage/'
 
-    //define if file has image 
-    if(file){
-        await uploadFile(file, path)
-        studentData.value.imageUrl = downloadURL
-    }
-    //define if new
-    if(isNew){
-        try{
-            createDocument(studentData.value)
-            isLoading.value = false                     
-            isOpen.value = false
-        } catch(error){
-            console.log(error);
-        }
-    } else{
-        try{
-            updateDocument( props.studentData.id, studentData.value,)
-        } catch(error){
-            console.log(error);
-        }
+    // //define if file has image 
+    // if(file){
+    //     await uploadFile(file, path)
+    //     studentData.value.imageUrl = downloadURL
+    // }
+    // //define if new
+    // if(isNew){
+    //     try{
+    //         createDocument(studentData.value)
+    //         isLoading.value = false                     
+    //         isOpen.value = false
+    //     } catch(error){
+    //         console.log(error);
+    //     }
+    // } else{
+    //     try{
+    //         updateDocument( props.studentData.id, studentData.value,)
+    //     } catch(error){
+    //         console.log(error);
+    //     }
 
-    }
+    // }
 
 }
 </script>

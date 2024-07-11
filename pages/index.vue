@@ -1,7 +1,7 @@
 <script setup>
 // import { useAuth } from '~/compasables/useAuth';
 
-// const route = useRouter()
+const route = useRouter()
 
 // const {login} = useAuth()
 // const loading = ref(false)
@@ -13,19 +13,19 @@
 
 // const form = ref()
 
-// async function onSubmit () {
+async function onSubmit () {
 //   loading.value = true
 //   try {
 //     const response = await login(state.email, state.password)
 //     console.log("success");
-//     route.push('/admin')
+    route.push('/admin')
 //     loading.value = false
 //   } catch (err) {
 //     console.error("error", err);
 //     loading.value = false
 
 //   }
-// }
+}
 </script>
 
 <template>
@@ -37,7 +37,7 @@
   <!-- Right: Login Form -->
   <div class="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
     <h1 class="text-2xl font-semibold mb-4">Login</h1>
-    <form >
+    <form @submit="onSubmit()">
       <!-- Username Input -->
       <div class="mb-4">
         <label for="username" class="block text-gray-600">Username</label>

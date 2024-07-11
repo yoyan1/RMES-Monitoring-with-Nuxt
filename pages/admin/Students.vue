@@ -1,9 +1,6 @@
 <script setup>
 import {collection, doc, getDocs, addDoc, updateDoc, query, where} from 'firebase/firestore';
 import { useFirestore, useCollection } from 'vuefire';
-import AddOrUpdate from '~/components/form/AddOrUpdate.vue';
-import PreviewStudent from '~/components/studentComponents/PreviewStudent.vue';
-import ImportStudents from '~/components/form/ImportStudents.vue';
 
 definePageMeta({
   layout: 'admin'
@@ -156,7 +153,7 @@ function select (row) {
           <UButton label="Archive" color="blue" :loading="load" @click="archive" required/>
         </UCard>
       </UModal>
-      <PreviewStudent :isOpen="isOpenPreview" :row="rowOpen" @close="isOpenPreview = false"/>
+      <StudentsPreview :isOpen="isOpenPreview" :row="rowOpen" @close="isOpenPreview = false"/>
         <div class="mb-4 rounded">
             <!-- <div class="p-5 bg-blue-600 text-white"> -->
                 <h1 class="text-xl">STUDENTS</h1>
@@ -166,8 +163,8 @@ function select (row) {
                         <UInput v-model="q" placeholder="Search name or lrn" :ui="{ color:{white: {outline: 'focus:ring-blue-600' }}  }" />
                     </div>
                     <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                        <AddOrUpdate/>
-                        <ImportStudents/>
+                        <FormAdd/>
+                        <FormImport/>
                          <USelectMenu v-model="selected" :options="levels" :ui="{ color:{white: {outline: 'focus:ring-blue-600' }}  }" placeholder="Select " />
                         <div class="flex items-center space-x-3 w-full md:w-auto"> 
                             <UButton label="Archive all" icon="i-heroicons-archive-box-arrow-down-20-solid" color="blue" @click="isOpen = true"/>

@@ -1,39 +1,23 @@
-// composables/useFirebaseStorage.js
-import { ref } from 'vue';
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { useFirebaseStorage, useStorageFile } from 'vuefire'
-import { storage } from './firebase';
+// import { ref as storageRef } from 'firebase/storage'
+// import { useFirebaseStorage, useStorageFile } from 'vuefire'
+
 // const storage = useFirebaseStorage()
+// const mountainFileRef = storageRef(storage, 'images/' + image)
 
-export default function useStorage() {
-  const uploadError = ref(null);
-  const uploadProgress = ref(0);
-  const downloadURL = ref(null);
+// export const {
+//   url,
+//   // gives you a percentage between 0 and 1 of the upload progress
+//   uploadProgress,
+//   uploadError,
+//   // firebase upload task
+//   uploadTask,
+//   upload,
+// } = useStorageFile(mountainFileRef)
 
-  const uploadFile = async (file, path) => {
-    uploadError.value = null;
-    uploadProgress.value = 0;
-    downloadURL.value = null;
+// export function uploadPicture(files) {
+//   const data = files.value?.item(0)
+//   if (data) {
+//     upload(data)
+//   }
+// }
 
-    try {
-      const fullPath = `${path}/${file.name}`;
-      const fileRef = storageRef(storage, fullPath);
-      const snapshot = await uploadBytes(fileRef, file);
-
-      // Monitor the upload progress (optional)
-      uploadProgress.value = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
-      // Get the download URL
-      downloadURL.value = await getDownloadURL(fileRef);
-    } catch (err) {
-      uploadError.value = err.message;
-    }
-  };
-
-  return {
-    uploadError,
-    uploadProgress,
-    downloadURL,
-    uploadFile
-  };
-}
